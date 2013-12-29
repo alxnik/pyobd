@@ -111,12 +111,23 @@ class OBDPort:
             return None
          
          debug_display(self._notify_window, 2, "atz response:" + self.ELMver)
+		 
+         self.send_command("AT@1")
+         debug_display(self._notify_window, 2, "@1 response:" + self.get_result())
+		 
+         self.send_command("ATDP")
+         debug_display(self._notify_window, 2, "ATDP response:" + self.get_result())
+		 
+
+		 
+		 
          self.send_command("ate0")  # echo off
          debug_display(self._notify_window, 2, "ate0 response:" + self.get_result())
          self.send_command("0100")
          ready = self.get_result()
          
-         if(ready is None):
+         if(ready is None or "ERROR" in ready):
+            print "Initialization error. Reconnecting"
             self.State = 0
             return None
             
@@ -165,7 +176,7 @@ class OBDPort:
          #cables can behave differently 
          if code[:6] == "NODATA": # there is no such sensor
              return "NODATA"
-             
+			 
          # first 4 characters are code from ELM
          code = code[4:]
          return code
