@@ -77,10 +77,14 @@ class OBD_Capture():
 
 if __name__ == "__main__":
 
-    o = OBD_Capture()
-    o.connect()
-    time.sleep(3)
-    if not o.is_connected():
-        print "Not connected"
-    else:
-        o.capture_data()
+	o = OBD_Capture()
+	while True:
+		o.connect()
+		time.sleep(3)
+		if not o.is_connected():
+			print "Not connected - retrying in 5 seconds"
+			time.sleep(5)
+		else:
+			break
+			
+	o.capture_data()
